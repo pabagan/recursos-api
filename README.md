@@ -18,20 +18,9 @@ gulp
 * [ExpressJS](http://expressjs.com/es/).
 * [Express Generator](http://expressjs.com/es/starter/generator.html) scaffolding.
 
-### Validate data
-
-* [Express Validator](https://github.com/ctavan/express-validator) using [validation by schema](https://www.npmjs.com/package/express-validator#validation-by-schema) using model validation. `xxx-component/xxx.schema`
-
-```bash
-npm install express-validator --save
-```
-
-See [available validators](https://github.com/chriso/validator.js).
-
-
 ## Database
 * [MongoDB](http://mongodb.org).
-* [MongoJS](https://github.com/mafintosh/mongojs) ORM.
+* [Mongoose](http://mongoosejs.com).
 
 ## Create
 
