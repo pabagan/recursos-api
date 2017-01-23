@@ -2,7 +2,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;;
-mongoose.connect(process.env.CHOCOPOLEN_MLAB);
+
+// added at app.js
+//mongoose.connect(process.env.CHOCOPOLEN_MLAB);
 
 // create a schema
 var productoSchema = new Schema({
