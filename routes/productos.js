@@ -34,7 +34,10 @@ router.post('/crear', function(req, res, next){
     if (err) {
       res.send(err);
     } else {
-      res.json(result);
+      res.json({
+        "info": "Producto creado con éxito",
+        "producto": result
+      });
     }
   });
 });
@@ -48,7 +51,10 @@ router.put('/:id', function(req, res, next){
     if (err) {
       res.send(err);
     } else {
-      res.json(result);
+      res.json({
+        "info": "Producto actualizado con éxito",
+        "producto": result
+      });
     }
   });  
 });
@@ -63,7 +69,7 @@ router.delete('/:id', function(req, res, next){
       res.send(err);
     } else {
       res.json({
-        "msg": "Producto borrado con éxito",
+        "info": "Producto borrado con éxito",
         "producto": result
       });
     }

@@ -17,16 +17,55 @@ gulp
 ## Server side
 * [ExpressJS](http://expressjs.com/es/).
 * [Express Generator](http://expressjs.com/es/starter/generator.html) scaffolding.
-
-## Database
 * [MongoDB](http://mongodb.org).
 * [Mongoose](http://mongoosejs.com).
 
-## Create
+### Create
 
 ```bash
 # handlebars views
 express express-api
+```
+
+## Deploy Heroku
+
+* Install [Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction).
+
+```bash
+# Create heroku app
+heroku create appName
+# Open folder of local git and run
+git push heroku master
+# Check logs
+heroku logs --tail
+# Run Heroku local
+heroku local web
+# Install addons
+heroku addons:create papertrail
+# List APP Addons
+heroku addons
+# Enter console
+heroku run node
+# Define env variables
+heroku config:set TIMES=2
+heroku config # view config
+```
+
+#### MongoLab Heroku
+https://devcenter.heroku.com/articles/mongolab
+```bash
+heroku addons:create mongolab
+```
+
+#### Deploy Heroku
+```bash
+# update local repo 
+git add .
+git commit -m "Demo"
+
+# deploy to Heroku
+git push heroku master
+heroku open cool
 ```
 
 ## Testing (TODO)
