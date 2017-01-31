@@ -1,7 +1,6 @@
 // grab the things we need
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;;
 
 // added at app.js
 //mongoose.connect(process.env.CHOCOPOLEN_MLAB);
@@ -11,26 +10,29 @@ var productoSchema = new Schema({
   nombre: { type: String, required: true, unique: true },
   unidad: {
     type: String, 
+    default: 'kg',
     enum: ['kg', 'l', 'ud'],
     required: [true, 'Añade la unidad'],
   },
   infoNutricional: {
-    calorias: Number,
-    grasas: Number,
-    grasasSaturadas: Number,
-    hidratos: Number,
-    hidratosAzucares: Number,
-    proteinas: Number,
+    calorias: { type: Number, default: 0 },
+    grasas: { type: Number, default: 0 },
+    grasasSaturadas: { type: Number, default: 0 },
+    hidratos: { type: Number, default: 0 },
+    hidratosAzucares: { type: Number, default: 0 },
+    proteinas: { type: Number, default: 0 },
   },
   metas:  {
-    category: ObjectId, 
-    label: ObjectId, 
+    category: [Schema.Types.ObjectId], 
+    label: [Schema.Types.ObjectId], 
   },
   descripcion: String,
   rechazo: String, 
   temperatura: Number,
   tolerancia: String, 
-  temporada: Array
+  temporada: { type: [Number], default: [1,1,1,1,1,1,1,1,1,1,1,1]},
+  created_at: { type: Date, default: Date.now },
+  updated_at: Date,
 },
 {
   versionKey: false // avoid mongoose automatic '__v' field

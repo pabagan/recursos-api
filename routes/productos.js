@@ -4,7 +4,7 @@ var Producto = require('../models/Producto');
 
 // Get Productos
 router.get('/', function(req, res, next){
-  Producto.find({}, function(err, result){
+  Producto.find({}, null, {sort: {date: -1}}, function(err, result){
     if (err) {
       res.send(err);
     } else {
@@ -36,7 +36,7 @@ router.post('/crear', function(req, res, next){
     } else {
       res.json({
         "info": "Producto creado con éxito",
-        "producto": result
+        "data": result
       });
     }
   });
@@ -47,13 +47,15 @@ router.put('/:id', function(req, res, next){
   var producto = req.body;
   var productoId = req.params.id;
 
+  producto.updated_at = new Date();
+
   Producto.findByIdAndUpdate(productoId, producto, function(err, result) {
     if (err) {
       res.send(err);
     } else {
       res.json({
         "info": "Producto actualizado con éxito",
-        "producto": result
+        "data": result
       });
     }
   });  
@@ -67,10 +69,15 @@ router.delete('/:id', function(req, res, next){
   Producto.findByIdAndRemove(productoId, function(err, result) {
     if (err) {
       res.send(err);
+    } else if (result == null) {
+      res.json({
+        "info": "El producto que intentas borrar ya no existe",
+        "data": result
+      });
     } else {
       res.json({
         "info": "Producto borrado con éxito",
-        "producto": result
+        "data": result
       });
     }
   });

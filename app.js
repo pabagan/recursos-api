@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 // Use mongoose
 var mongoose = require('mongoose');
@@ -14,6 +15,10 @@ var productos = require('./routes/productos');
 var tokens = require('./routes/tokens');
 
 var app = express();
+
+// Allow cross-origin request
+// https://www.npmjs.com/package/cors
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', index);
 app.use('/api/productos', productos);
