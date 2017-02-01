@@ -2,9 +2,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-// added at app.js
-//mongoose.connect(process.env.CHOCOPOLEN_MLAB);
-
 // create a schema
 var productoSchema = new Schema({
   nombre: { type: String, required: true, unique: true },

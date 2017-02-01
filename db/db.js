@@ -1,14 +1,8 @@
 var mongoose = require('mongoose');
+var config = require('../config/config');
 
-
-var MODE = process.env.NODE_ENV || 'development';
-
-// db settings
-var db = {
-    'production': process.env.CHOCOPOLEN_MLAB,
-    'development': process.env.CHOCOPOLEN_MLAB,
-};
+var dbUrl = config.database[config.environment];
 
 module.exports = {
-    connect: mongoose.connect(db[MODE]),
+    connect: mongoose.connect(dbUrl),
 };

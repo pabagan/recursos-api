@@ -5,14 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var passport = require('passport');
+var Strategy = require('passport-http-bearer').Strategy;
+var config = require('./config/config');
+var db = require('./db/db').connect;
 
-// Use mongoose
-var mongoose = require('mongoose');
-mongoose.connect(process.env.CHOCOPOLEN_MLAB);
-
-var index = require('./routes/index');
-var productos = require('./routes/productos');
-var tokens = require('./routes/tokens');
 
 var app = express();
 
@@ -32,10 +29,39 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Configure the Bearer strategy for use by Passport.
+//
+// The Bearer strategy requires a `verify` function which receives the
+// credentials (`token`) contained in the request.  The function must invoke
+// `cb` with a user object, which will be set at `req.user` in route handlers
+// after authentication.
+/*
+ */
+
+passport.use(new Strategy( function(token, cb) {
+  users.findByToken(token, function(err, user) {
+    if (err) { return cb(err); }
+    if (!user) { return cb(null, false); }
+    return cb(null, user);
+  });
+}));
+
+
+var index = require('./routes/index');
+var users = require('./routes/users');
+var productos = require('./routes/productos');
+var tokens = require('./routes/tokens');
 
 app.use('/', index);
-app.use('/api/productos', productos);
-app.use('/api/tokens', tokens);
+
+
+app.use('/api/productos',
+        // curl -v -H "Authorization: Bearer 123456789" http://127.0.0.1:3000/
+        // curl -v http://127.0.0.1:3000/?access_token=123456789
+        passport.authenticate('bearer', { session: false }), 
+        productos
+      );
+//app.use('/api/tokens', tokens);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
