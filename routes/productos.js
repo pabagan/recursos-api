@@ -58,7 +58,7 @@ router.put('/:id', function(req, res, next){
         "data": result
       });
     }
-  });  
+  });
 });
 
 // Delete Producto

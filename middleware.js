@@ -1,4 +1,5 @@
 var jwt     = require('jsonwebtoken');
+var config  = require('./config/config');
 
 module.exports.jwtVerifyToken = function(req, res, next) {
   // check header or url parameters or post parameters for token
@@ -7,7 +8,7 @@ module.exports.jwtVerifyToken = function(req, res, next) {
   // check token
   if (token) {
     // jwt verifies secret and checks exp
-    jwt.verify(token, ''+req.app.get('superSecret'), function(err, decoded) {      
+    jwt.verify(token, req.app.get('superSecret'), function(err, decoded) {      
       if (err) {
         return res.json({ 
           success: false, 
@@ -27,6 +28,17 @@ module.exports.jwtVerifyToken = function(req, res, next) {
     
   }
 };
+
+/**
+ * Auth0 way to API log
+ * 
+ * @see https://auth0.com/blog/angular-2-authentication/
+ * @return  object jwt
+module.exports.authCheck = jwt({
+    secret: new Buffer(config.auth0.secret, 'base64'),
+    audience: config.auth0.clientId,
+});
+ */
 
 // catch 404 and forward to error handler
 module.exports.err404 = function(req, res, next) {

@@ -1,8 +1,3 @@
-var records = [
-    { id: 1, username: 'jack', token: '123456789', displayName: 'Jack', emails: [ { value: 'jack@example.com' } ] }
-  , { id: 2, username: 'jill', token: 'abcdefghi', displayName: 'Jill', emails: [ { value: 'jill@example.com' } ] }
-];
-
 var express = require('express');
 var router = express.Router();
 var User = require('../models/User');
@@ -34,7 +29,7 @@ router.get('/:id', function(req, res, next){
 // Create User
 router.post('/new', function(req, res, next){
   var user = req.body;
-    
+  
   User.create(user, function(err, result){
     if (err) {
       res.send(err);
@@ -45,6 +40,17 @@ router.post('/new', function(req, res, next){
       });
     }
   });
+  /*
+  
+  bcrypt.hash(user.password, saltRounds, function(err, hash) {
+    if(err){
+      res.send('Tenemos problemas para encriptar tu contraseña');
+    } else {
+      user.password = hash;
+      // Create user
+    }
+  });
+   */
 });
 
 // Update User
@@ -89,15 +95,3 @@ router.delete('/:id', function(req, res, next){
 });
 
 module.exports = router;
-
-exports.findByToken = function(token, cb) {
-  process.nextTick(function() {
-    for (var i = 0, len = records.length; i < len; i++) {
-      var record = records[i];
-      if (record.token === token) {
-        return cb(null, record);
-      }
-    }
-    return cb(null, null);
-  });
-}

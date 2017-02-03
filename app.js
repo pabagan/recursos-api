@@ -29,6 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // credentials (`token`) contained in the request.  The function must invoke
 // `cb` with a user object, which will be set at `req.user` in route handlers
 // after authentication.
+/*
+
 passport.use(new Strategy( function(token, cb) {
   users.findByToken(token, function(err, user) {
     if (err) { return cb(err); }
@@ -36,15 +38,18 @@ passport.use(new Strategy( function(token, cb) {
     return cb(null, user);
   });
 }));
+ */
+// jwt verify middleware
+// activate token verification loggin to 
+// next routes.
+app.use(middleware.jwtVerifyToken);
 
 // not verified routes
 app.use('/', require('./routes/index'));
 app.use('/authenticate', require('./routes/authenticate'));
-
-// jwt verify middleware
-app.use(middleware.jwtVerifyToken);
-
 app.use('/users', require('./routes/users'));
+
+
 app.use('/api/productos',
         // curl -v -H "Authorization: Bearer 123456789" http://127.0.0.1:3000/
         // curl -v http://127.0.0.1:3000/?access_token=123456789
