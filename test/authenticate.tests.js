@@ -4,14 +4,15 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var assert = require('assert');
 var request = require("request");
+var jwt     = require('jsonwebtoken');
 var should = chai.should();
 var expect = chai.expect;
 //var asert = chai.asert;
-var utils = require('../utils');
+var config = require('../config/config');
+var utils = require('../shared/utils');
 var app = require("../app");
 var server = app.listen(0);
 var port = server.address().port;
-
 // Test Configuration
 var MODEL = 'Users'
 var API_URL = 'http://localhost:' + port + '/api/authenticate'
@@ -62,6 +63,7 @@ describe(MODEL + " collection reset", function() {
  * CRUD Test via API with chai-http
  */
 describe("Create fake user:", function() {
+  var token = '';
   // Create
   it('Create user with DEMO_DOCUMENT values', (done) => {
     chai.request(API_USER)
@@ -91,32 +93,61 @@ describe("Create fake user:", function() {
 /*
  * Authenticate user
  */
-describe("Authenticate fake user:", function() {
+describe("Authentication", function() {
   // OK
-  it('Authenticate OK', (done) => {
+  it('should authenticate OK if correct credentials passed', (done) => {
     chai.request(API_URL)
       .post('/')
       .send(DEMO_DOCUMENT)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('success').eql(true);;
+        res.body.should.have.property('success').eql(true);
         res.body.should.have.property('message').eql('User authenticated! Yeah!');
         res.body.should.have.property('token');
+        
+        // Asign token to use in 'Verify jwt token'
+        token = res.body.token;
+        console.log(token);
+        
         done();
       });
   });
 
   // KO
-  it('Authenticate KO', (done) => {
+  it('should authenticate KO if wrong credentials passed', (done) => {
     DEMO_DOCUMENT.password = 'badpass';
     chai.request(API_URL)
       .post('/')
       .send(DEMO_DOCUMENT)
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.have.property('success').eql(false);;
-        res.body.should.have.property('message').eql('Authentication failed. Wrong password.');
+        res.should.have.status(401);
+        res.body.should.have.property('success').eql(false);
+        res.body.should.have.property('message').eql('Authentication failed. Wrong user or password.');
         res.body.should.not.have.property('token');
+        done();
+      });
+  });
+
+  // verify token
+  it('should verify created jwt token', (done) => {
+    chai.request(API_URL)
+      .post('/token')
+      .send({token: token})
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('success').eql(true);
+        done();
+      });
+  });
+
+  // verify token
+  it('should not verify wrong jwt token', (done) => {
+    chai.request(API_URL)
+      .post('/token')
+      .send({token: 'bad token'})
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('success').eql(false);
         done();
       });
   });

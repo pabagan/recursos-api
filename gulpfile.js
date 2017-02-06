@@ -5,6 +5,8 @@ var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var nodemon = require('gulp-nodemon');
+var mocha = require('gulp-mocha');
+var batch = require('gulp-batch');
 
 /**
  * Gulp Tasks
@@ -43,3 +45,14 @@ gulp.task('nodemon', function (cb) {
 gulp.task('default', ['browser-sync'], function () {
   gulp.watch(['**/*.html'], reload);
 });
+
+gulp.task('test', function () {
+  gulp.watch(['test/**', 'lib/**'], batch(function (events, cb) {
+    return gulp.src(['test/*.js'])
+      .pipe(mocha({ reporter: 'list' }))
+      .on('error', function (err) {
+        console.log(err.stack);
+      });
+  }));
+});
+

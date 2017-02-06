@@ -4,7 +4,7 @@ var User = require('../models/User');
 
 // Get Users
 router.get('/', function(req, res, next){
-  User.find({}, null, {sort: {date: -1}}, function(err, result){
+  User.find({}, '_id email name phone user', {sort: {date: -1}}, function(err, result){
     if (err) {
       res.send(err);
     } else {
@@ -52,6 +52,7 @@ router.route('/:id')
       if (err) {
         res.send(err);
       } else if (result == null) {
+        res.status(400);
         res.json({
           "message": "User not exist",
           "data": result
@@ -76,7 +77,7 @@ router.route('/:id')
     // pre triggers.
     User.findById(userId, function(err, user) {
       if (err)
-          res.send(err);
+        res.send(err);
 
       for (var arg in userReq){
         user[arg] = userReq[arg]
@@ -85,10 +86,10 @@ router.route('/:id')
       // save the updated user
       user.save(function(err) {
         if (err)
-            res.send(err);
+          res.send(err);
 
         res.json({ 
-          message: 'Book updated!', 
+          message: 'User updated!', 
           data: user
         });
       });

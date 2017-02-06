@@ -1,5 +1,5 @@
 var jwt     = require('jsonwebtoken');
-var config  = require('./config/config');
+var config  = require('../config/config');
 
 module.exports.jwtVerifyToken = function(req, res, next) {
   // check header or url parameters or post parameters for token

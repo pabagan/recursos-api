@@ -22,7 +22,7 @@ router.post('/create', function(req, res, next){
       res.send(err);
     } else {
       res.json({
-        "message": "Producto creado con éxito",
+        "message": "Producto created",
         "data": result
       });
     }
@@ -41,6 +41,7 @@ router.route('/:id')
       }
     });
   })
+
   // Delete Producto
   .delete(function(req, res, next) {
     var producto = req.body;
@@ -50,18 +51,20 @@ router.route('/:id')
       if (err) {
         res.send(err);
       } else if (result == null) {
+        res.status(400);
         res.json({
-          "message": "El producto que intentas borrar ya no existe",
+          "message": "Producto not exist",
           "data": result
         });
       } else {
         res.json({
-          "message": "Producto borrado con éxito",
+          "message": "Producto deleted",
           "data": result
         });
       }
     });
   })
+  
   // Update Producto
   .put(function(req, res, next) {
     var producto = req.body;
@@ -72,9 +75,11 @@ router.route('/:id')
     Producto.findByIdAndUpdate(productoId, producto, {new: true}, function(err, result) {
       if (err) {
         res.send(err);
+      } else if (result == null) {
+        res.status(400);
       } else {
         res.json({
-          "message": "Producto actualizado con éxito",
+          "message": "Producto updated",
           "data": result
         });
       }

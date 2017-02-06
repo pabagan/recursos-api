@@ -8,7 +8,7 @@ var cors = require('cors');
 var passport = require('passport');
 var Strategy = require('passport-http-bearer').Strategy;
 var db = require('./db/db').connect;
-var middleware = require('./middleware');
+var middleware = require('./shared/middleware');
 
 var app = express();
 
@@ -42,7 +42,6 @@ passport.use(new Strategy( function(token, cb) {
 // jwt verify middleware
 // activate token verification loggin to 
 // next routes.
-//app.use(middleware.jwtVerifyToken);
 
 // not verified routes
 app.use('/', require('./routes/index'));
@@ -50,13 +49,15 @@ app.use('/api/authenticate', require('./routes/authenticate'));
 app.use('/api/categories', require('./routes/categories'));
 app.use('/api/users', require('./routes/users'));
 
-
+//app.use(middleware.jwtVerifyToken);
 app.use('/api/productos',
+        //middleware.jwtVerifyToken,
         // curl -v -H "Authorization: Bearer 123456789" http://127.0.0.1:3000/
         // curl -v http://127.0.0.1:3000/?access_token=123456789
         //passport.authenticate('bearer', { session: false }), 
         require('./routes/productos')
       );
+
 
 // Errors
 app.use(middleware.err404);

@@ -1,9 +1,10 @@
 var express = require('express');
 var config = require('../config/config');
-var utils =require('../utils');
+var utils =require('../shared/utils');
 var jwt     = require('jsonwebtoken');
 var router  = express.Router();
 var User = require('../models/User');
+
 
 // route to authenticate a user (POST http://localhost:8080/api/authenticate)
 router.post('/', function(req, res) {
@@ -13,25 +14,28 @@ router.post('/', function(req, res) {
 
     // user not exits
     if (!user) {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
+      res.status(401);
+      res.json({ 
+        success: false, 
+        message: 'Authentication failed. Wrong user or password.' 
+      });
     // user exits
     } else if (user) {
       // ... and password match
       utils.bcryptCompare(req.body.password, user.password, function(err, match) {
         // bcrypt not match
         if (!match) {
+          res.status(401);
           res.json({ 
             success: false, 
-            message: 'Authentication failed. Wrong password.' 
+            message: 'Authentication failed. Wrong user or password.' 
           });
         } else {
           // jwt token
           var token = jwt.sign({
-            exp: Math.floor(Date.now() / 1000) + (60 * 60),
             data: user
-          //}, ''+req.app.get('superSecret'));
-          }, new Buffer(req.app.get('superSecret'), 'base64'));
-          
+          }, ''+req.app.get('superSecret'), { expiresIn: '12h' });
+
           // return the information including token as JSON
           res.json({
             success: true,
@@ -39,6 +43,30 @@ router.post('/', function(req, res) {
             token: token
           });
         }   
+      });
+    }
+  })
+});
+
+router.post('/token', function(req, res, next) {
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  console.log('--------------------------------------');
+  console.log('--------------------------------------');
+  console.log('---------- ver si esta ok ------------');
+  console.log('--------------------------------------');
+  console.log('--------------------------------------');
+  console.log('--------------------------------------');
+  jwt.verify(token, req.app.get('superSecret'), function(err, decoded) {      
+    if (err) {
+      res.status(401);
+      res.json({ 
+        success: false, 
+        message: 'Failed to authenticate token.' 
+      });
+    } else {
+      res.json({ 
+        success: true, 
+        message: 'Token authenticated.' 
       });
     }
   });

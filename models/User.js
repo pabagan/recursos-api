@@ -1,7 +1,7 @@
 // get an instance of mongoose and mongoose.Schema
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var utils =require('../utils');
+var utils =require('../shared/utils');
 
 // create a schema
 var UserSchema = new Schema({
