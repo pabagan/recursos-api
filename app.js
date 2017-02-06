@@ -42,12 +42,12 @@ passport.use(new Strategy( function(token, cb) {
 // jwt verify middleware
 // activate token verification loggin to 
 // next routes.
-app.use(middleware.jwtVerifyToken);
+//app.use(middleware.jwtVerifyToken);
 
 // not verified routes
 app.use('/', require('./routes/index'));
-app.use('/authenticate', require('./routes/authenticate'));
-app.use('/users', require('./routes/users'));
+app.use('/api/authenticate', require('./routes/authenticate'));
+app.use('/api/users', require('./routes/users'));
 
 
 app.use('/api/productos',

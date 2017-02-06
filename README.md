@@ -52,7 +52,8 @@ heroku config # view config
 ```
 
 #### MongoLab Heroku
-https://devcenter.heroku.com/articles/mongolab
+Integrate [MongoLab with Heroku](https://devcenter.heroku.com/articles/mongolab) guide.
+
 ```bash
 heroku addons:create mongolab
 ```
@@ -68,12 +69,16 @@ git push heroku master
 heroku open cool
 ```
 
-## Testing (TODO)
+## Testing
 At `/tests` some TDD modules using:
 
 * [Mocha](https://mochajs.org/).
 * [Chai](http://chaijs.com/).
+* [Chai Http](https://github.com/chaijs/chai-http). to test REST endpoints.
 
 ```bash
-npm test
+# Test all
+NODE_ENV=test mocha --recursive
+# Test single file
+NODE_ENV=test mocha test/users.tests.js 
 ```

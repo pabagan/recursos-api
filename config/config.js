@@ -12,6 +12,7 @@ module.exports = {
     ports: {
       default: 3000,
       secure: 3001,
+      test: 3002,
     },
     auth0:{
       secret: 'Xi7LPdq8uryidgTPn7UjZ8WZfnWsQLgcFjYGEwHexSLYH_CYiuE1SrBX5lVU1cDI',
@@ -28,6 +29,7 @@ module.exports = {
     secret: process.env.SECRET_KEY,
     // database url
     database: {
+      'test': process.env.MLAB_TEST_DB,
       'production': process.env.CHOCOPOLEN_MLAB,
       'development': process.env.CHOCOPOLEN_MLAB,
     }

@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon bin/www",
-    "test": "mocha --timeout 10000"
+    "start": "NODE_ENV=development nodemon bin/www",
+    "test": "NODE_ENV=test mocha --recursive"
   },
   "engines": {
     "node": "6.9.4"
@@ -27,6 +27,7 @@
   "devDependencies": {
     "browser-sync": "^2.18.6",
     "chai": "*",
+    "chai-http": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
     "mocha": "*",

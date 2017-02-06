@@ -112,7 +112,7 @@ describe(MODEL + " CRUD API test:", function() {
   // Create
   it('Create new ' + MODEL + 'with DEMO_DOCUMENT values', (done) => {
     chai.request(API_URL)
-      .post('/crear')
+      .post('/create')
       .send(DEMO_DOCUMENT)
       .end((err, res) => {
         res.should.have.status(200);

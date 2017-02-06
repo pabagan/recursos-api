@@ -7,7 +7,6 @@ var User = require('../models/User');
 
 // route to authenticate a user (POST http://localhost:8080/api/authenticate)
 router.post('/', function(req, res) {
-
   // find the user
   User.findOne({ name: req.body.name }, function(err, user) {
     if (err) throw err;
@@ -30,7 +29,7 @@ router.post('/', function(req, res) {
           var token = jwt.sign({
             exp: Math.floor(Date.now() / 1000) + (60 * 60),
             data: user
-          //}, ''+user.secret);
+          //}, ''+req.app.get('superSecret'));
           }, new Buffer(req.app.get('superSecret'), 'base64'));
           
           // return the information including token as JSON
