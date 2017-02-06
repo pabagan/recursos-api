@@ -6,8 +6,7 @@ const bcryptSalt = 10;
  */
 module.exports.bcryptHash = function(plainText, cb){
   bcrypt.hash(plainText, bcryptSalt, function(err, hash) {
-    if (err) return cb(err);
-    cb(null, hash);
+    cb(err, hash);
   });
 }
 
@@ -16,7 +15,6 @@ module.exports.bcryptHash = function(plainText, cb){
  */
 module.exports.bcryptCompare = function(plainText, hashedText, cb){
   bcrypt.compare(plainText, hashedText, function(err, match){
-    if (err) return cb(err);
-    cb(null, match);
+    cb(err, match);
   });
 }

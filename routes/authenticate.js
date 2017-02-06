@@ -19,7 +19,7 @@ router.post('/', function(req, res) {
       // ... and password match
       utils.bcryptCompare(req.body.password, user.password, function(err, match) {
         // bcrypt not match
-        if (err) {
+        if (!match) {
           res.json({ 
             success: false, 
             message: 'Authentication failed. Wrong password.' 
