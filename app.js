@@ -47,6 +47,7 @@ passport.use(new Strategy( function(token, cb) {
 // not verified routes
 app.use('/', require('./routes/index'));
 app.use('/api/authenticate', require('./routes/authenticate'));
+app.use('/api/categories', require('./routes/categories'));
 app.use('/api/users', require('./routes/users'));
 
 
