@@ -8,7 +8,9 @@ router.get('/', function(req, res, next){
     if (err) {
       res.send(err);
     } else {
-      res.json(result);
+      res.json({
+        "data": result
+      });
     }
   });
 });
@@ -38,7 +40,9 @@ router.route('/:id')
       if (err) {
         res.send(err);
       } else {
-        res.json(result);
+        res.json({
+        "data": result
+      });
       }
     });
   })
@@ -76,8 +80,9 @@ router.route('/:id')
     // use findById method to have access to mongoose 
     // pre triggers.
     User.findById(userId, function(err, user) {
-      if (err)
+      if (err){
         res.send(err);
+      }
 
       for (var arg in userReq){
         user[arg] = userReq[arg]
@@ -85,8 +90,9 @@ router.route('/:id')
 
       // save the updated user
       user.save(function(err) {
-        if (err)
+        if (err){
           res.send(err);
+        }
 
         res.json({ 
           message: 'User updated!', 

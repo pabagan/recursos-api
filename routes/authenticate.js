@@ -50,12 +50,7 @@ router.post('/', function(req, res) {
 
 router.post('/token', function(req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
-  console.log('--------------------------------------');
-  console.log('--------------------------------------');
-  console.log('---------- ver si esta ok ------------');
-  console.log('--------------------------------------');
-  console.log('--------------------------------------');
-  console.log('--------------------------------------');
+  
   jwt.verify(token, req.app.get('superSecret'), function(err, decoded) {      
     if (err) {
       res.status(401);

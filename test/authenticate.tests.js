@@ -14,7 +14,6 @@ var app = require("../app");
 var server = app.listen(0);
 var port = server.address().port;
 // Test Configuration
-var MODEL = 'Users'
 var API_URL = 'http://localhost:' + port + '/api/authenticate'
 var API_USER = 'http://localhost:' + port + '/api/users'
 var Model = require('../models/User');
@@ -25,10 +24,10 @@ var Model = require('../models/User');
 var DEMO_DOCUMENT = {
   _id: "5892609064909643fb7e5e62",
   email: "user@gmail.com", 
-  name: "Mr User", 
+  name: "user", 
   password: "pass",
-  phone: "+34670588330", 
-  user: "user"
+  phone: "+34670688330", 
+  role: "user"
 }
 
 // chay http middleware
@@ -44,8 +43,8 @@ chai.use(chaiHttp);
 /**
  * Reset test DB collection.
  */
-describe(MODEL + " collection reset", function() {
-  it("Clean " + MODEL + " collection", function(done) {
+describe("Users collection reset", function() {
+  it("Clean Users collection", function(done) {
     Model.remove({}, function(err, response, body) {
       if (err) done(err);
       
@@ -107,8 +106,6 @@ describe("Authentication", function() {
         
         // Asign token to use in 'Verify jwt token'
         token = res.body.token;
-        console.log(token);
-        
         done();
       });
   });

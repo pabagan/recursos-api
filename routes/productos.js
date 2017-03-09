@@ -8,7 +8,9 @@ router.get('/', function(req, res, next){
     if (err) {
       res.send(err);
     } else {
-      res.json(result);
+      res.json({
+        "data": result
+      });
     }
   });
 });
@@ -37,7 +39,9 @@ router.route('/:id')
       if (err) {
         res.send(err);
       } else {
-        res.json(result);
+        res.json({
+          "data": result
+        });
       }
     });
   })

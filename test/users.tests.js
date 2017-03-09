@@ -13,9 +13,8 @@ var server = app.listen(0);
 var port = server.address().port;
 
 // Test Configuration
-var MODEL = 'Users'
 var API_URL = 'http://localhost:' + port + '/api/users'
-var Model = require('../models/User');
+var User = require('../models/User');
 
 /**
  * Dummy create and update data
@@ -26,7 +25,7 @@ var DEMO_DOCUMENT = {
   name: "Mr User", 
   password: "pass",
   phone: "+34670588330", 
-  user: "user"
+  role: "user"
 }
 
 var DEMO_DOCUMENT_UPDATE = {
@@ -34,7 +33,7 @@ var DEMO_DOCUMENT_UPDATE = {
   name: "Mr Updated Username", 
   password: "otherpass",
   phone: "+340707070", 
-  user: "admin"
+  role: "admin"
 }
 
 // chay http middleware
@@ -49,7 +48,7 @@ chai.use(chaiHttp);
 /**
  * Check server errors.
  */
-describe(MODEL + " testing", function() {
+describe("Users testing", function() {
   it("Check if server is delivering with no errors", function(done) {
     request(API_URL, function(err, response, body) {
       if (err) done(err);
@@ -63,12 +62,12 @@ describe(MODEL + " testing", function() {
 /**
  * Reset test DB collection.
  */
-describe(MODEL + " collection reset", function() {
-  it("Clean " + MODEL + " collection", function(done) {
-    Model.remove({}, function(err, response, body) {
+describe("Users collection reset", function() {
+  it("Clean Users collection", function(done) {
+    User.remove({}, function(err, response, body) {
       if (err) done(err);
       
-      Model.find({}, function(err, result){
+      User.find({}, function(err, result){
         if (err) done(err);
 
         assert.equal(result.length, 0);
@@ -81,9 +80,9 @@ describe(MODEL + " collection reset", function() {
 /*
  * CRUD Test via API with chai-http
  */
-describe(MODEL + " CRUD API test:", function() {
+describe("Users CRUD API test:", function() {
   // Create
-  it('Create new ' + MODEL + ' with DEMO_DOCUMENT values', (done) => {
+  it('Create new Users with DEMO_DOCUMENT values', (done) => {
     chai.request(API_URL)
       .post('/create')
       .send(DEMO_DOCUMENT)
@@ -108,23 +107,23 @@ describe(MODEL + " CRUD API test:", function() {
   });
 
   // Read
-  it('Read created ' + MODEL, (done) => {
+  it('Read created Users', (done) => {
     chai.request(API_URL)
       .get('/' + DEMO_DOCUMENT._id)
       .end((err, res) => {
         res.should.have.status(200);
-        assert.equal(res.body._id, DEMO_DOCUMENT._id);
-        res.body.should.be.a('object');
+        assert.equal(res.body.data._id, DEMO_DOCUMENT._id);
+        res.body.data.should.be.a('object');
         
         // Check all properties are updated 
         // with provided value.
         for (var property in DEMO_DOCUMENT) {
           if(property == "password"){
-            utils.bcryptCompare(DEMO_DOCUMENT['password'], res.body['password'], function(error, match){
+            utils.bcryptCompare(DEMO_DOCUMENT['password'], res.body.data['password'], function(error, match){
               if (!match) done(err);        
             });
           } else {
-            res.body.should.have.property(property).eql(DEMO_DOCUMENT[property]);
+            res.body.data.should.have.property(property).eql(DEMO_DOCUMENT[property]);
           }
         }
         done();
@@ -132,7 +131,7 @@ describe(MODEL + " CRUD API test:", function() {
   });
 
   // Update
-  it('Update created ' + MODEL + ' with DEMO_DOCUMENT_UPDATE values', (done) => {
+  it('Update created Users with DEMO_DOCUMENT_UPDATE values', (done) => {
     chai.request(API_URL)
       .put('/' + DEMO_DOCUMENT._id)
       .send(DEMO_DOCUMENT_UPDATE)
@@ -158,7 +157,7 @@ describe(MODEL + " CRUD API test:", function() {
   });
 
   // Delete
-  it('Delete created ' + MODEL, (done) => {
+  it('Delete created Users', (done) => {
     chai.request(API_URL)
       .delete('/' + DEMO_DOCUMENT._id)
       .send(DEMO_DOCUMENT_UPDATE)
