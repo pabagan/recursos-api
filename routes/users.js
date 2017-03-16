@@ -4,7 +4,7 @@ var User = require('../models/User');
 
 // Get Users
 router.get('/', function(req, res, next){
-  User.find({}, '_id email name phone user', {sort: {date: -1}}, function(err, result){
+  User.find({}, '_id email name phone user role', {sort: {date: -1}}, function(err, result){
     if (err) {
       res.send(err);
     } else {
@@ -36,7 +36,7 @@ router.route('/:id')
   .get(function(req, res, next) {
     var userId = req.params.id;
     
-    User.findById(userId, function(err, result) {
+    User.findById(userId, '_id email name phone user role created_at', function(err, result) {
       if (err) {
         res.send(err);
       } else {
