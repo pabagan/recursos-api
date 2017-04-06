@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  # mongodb
+  mongodb:
+    image: mongo
+    volumes_from:
+      - mongodb-data
+    ports:
+      - "27017:27017"
+    container_name: ${CONTAINER_NAME}
+    env_file: .env
+    
+  # mongodb data
+  mongodb-data:
+    image: mongo
+    container_name: ${CONTAINER_NAME}-data
+    volumes:
+      - ${MONGODB_PERSISTENT}:/data/db
+      - ./certs:/etc/ssl
+      - ./config:/config
+    command: "true"
