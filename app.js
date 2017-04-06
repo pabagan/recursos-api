@@ -14,7 +14,7 @@ var app = express();
 
 app.set('superSecret', config.secret); // secret variable
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(cors());
 app.use(logger('dev'));
