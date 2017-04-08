@@ -22,7 +22,7 @@ module.exports.jwtVerifyToken = function(req, res, next) {
   } else {
     return res.status(403).send({ 
         success: false, 
-        message: 'Request need to provide a token.' 
+        message: 'Need to provide a valid token.' 
     });   
   }
 };

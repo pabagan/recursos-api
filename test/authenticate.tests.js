@@ -61,10 +61,10 @@ describe("Users collection reset", function() {
 /*
  * CRUD Test via API with chai-http
  */
-describe("Create fake user:", function() {
+describe("Create fake user", function() {
   var token = '';
   // Create
-  it('Create user with DEMO_DOCUMENT values', (done) => {
+  it('should create user', (done) => {
     chai.request(API_USER)
       .post('/create')
       .send(DEMO_DOCUMENT)
@@ -94,7 +94,7 @@ describe("Create fake user:", function() {
  */
 describe("Authentication", function() {
   // OK
-  it('should authenticate OK if correct credentials passed', (done) => {
+  it('should authenticate OK', (done) => {
     chai.request(API_URL)
       .post('/')
       .send(DEMO_DOCUMENT)
@@ -111,7 +111,7 @@ describe("Authentication", function() {
   });
 
   // KO
-  it('should authenticate KO if wrong credentials passed', (done) => {
+  it('should authenticate KO', (done) => {
     DEMO_DOCUMENT.password = 'badpass';
     chai.request(API_URL)
       .post('/')
@@ -126,7 +126,7 @@ describe("Authentication", function() {
   });
 
   // verify token
-  it('should verify created jwt token', (done) => {
+  it('should verify jwt token', (done) => {
     chai.request(API_URL)
       .post('/token')
       .send({token: token})

@@ -46,21 +46,33 @@ passport.use(new Strategy( function(token, cb) {
 // not verified routes
 app.use('/', require('./routes/index'));
 app.use('/api/authenticate', require('./routes/authenticate'));
-app.use('/api/categories', require('./routes/categories'));
 app.use('/api/users', require('./routes/users'));
 
 //app.use(middleware.jwtVerifyToken);
-app.use('/api/productos',
+app.use('/api/recursos',
         //middleware.jwtVerifyToken,
         // curl -v -H "Authorization: Bearer 123456789" http://127.0.0.1:3000/
         // curl -v http://127.0.0.1:3000/?access_token=123456789
         //passport.authenticate('bearer', { session: false }), 
-        require('./routes/productos')
+        require('./routes/recursos')
       );
 
 
 // Errors
-app.use(middleware.err404);
-app.use(middleware.errors);
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use(function(req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
 module.exports = app;

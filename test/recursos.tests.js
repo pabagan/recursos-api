@@ -7,49 +7,60 @@ var request = require("request");
 var should = chai.should();
 var expect = chai.expect;
 //var asert = chai.asert;
-var utils = require('../shared/utils');
+
 var app = require("../app");
 var server = app.listen(0);
 var port = server.address().port;
 
+var config = require('../config/config');
+
 // Test Configuration
-var API_URL = 'http://localhost:' + port + '/api/users'
-var User = require('../models/User');
+var API_URL = 'http://localhost:' + port + '/api/recursos'
+var Recurso = require('../models/Recurso');
 
 // Dummy create and update data
-var MODEL_MOCK = require('../models/User.mock');
+var MODEL_MOCK = require('../models/Recurso.mock');
 var MODEL_MOCK_UPDATE = {
-  email: "user_2@gmail.com", 
-  name: "Mr Updated Username", 
-  password: "otherpass",
-  phone: "+340707070", 
-  role: "admin"
+  "image": "http://placehold.it/980x640",
+  "name": "Demo recurso updated",
+  "shortDescription": "Short Description updated",
+  "longDescription": "Long Description updated",
+  "category": "social",
+  "street": "Arabista, 00",
+  "state": "Sevilla",
+  "city": "Dos Hermanas",
+  "phone": "678493201",
+  "email": "other@gmail.com",
+  "website": "www.demosite-updated.com",
+  "loc": { 
+    "type": "Point",
+    "coordinates": [-3.97, 20.77]
+  },
+  "status": "publish"
 }
 
 // chay http middleware
 chai.use(chaiHttp);
 
 // Test CRUD
-describe("Users CRUD", function() {
-  // clean test DB
+describe("Recurso CRUD", function() {
   before('clean test db', function(done) {
-    // runs before all tests in this block
-    User.remove({}, function(err, response, body) {
+    Recurso.remove({}, function(err, response, body) {
       if (err) done(err);
       
-      User.find({}, function(err, result){
+      Recurso.find({}, function(err, result){
         if (err) done(err);
 
         assert.equal(result.length, 0);
         done();
       });
     });
-  });
+  });  
 
   // Create
-  it('should create user', (done) => {
+  it('should create recurso', (done) => {
     chai.request(API_URL)
-      .post('/create')
+      .post('/')
       .send(MODEL_MOCK)
       .end((err, res) => {
         res.should.have.status(200);
@@ -58,13 +69,7 @@ describe("Users CRUD", function() {
         // Check all properties are added 
         // with provided value.
         for (var property in MODEL_MOCK) {
-          if(property == "password"){
-            utils.bcryptCompare(MODEL_MOCK['password'], res.body.data['password'], function(error, match){
-              if (!match) done(err);        
-            });
-          } else {
-            res.body.data.should.have.property(property).eql(MODEL_MOCK[property]);
-          }
+          res.body.data.should.have.property(property).eql(MODEL_MOCK[property]);
         }
 
         done();
@@ -72,30 +77,25 @@ describe("Users CRUD", function() {
   });
 
   // Read
-  it('should read user', (done) => {
+  it('should read recurso', (done) => {
     chai.request(API_URL)
       .get('/' + MODEL_MOCK._id)
       .end((err, res) => {
         res.should.have.status(200);
+        res.body.should.be.a('object');
         assert.equal(res.body.data._id, MODEL_MOCK._id);
-        res.body.data.should.be.a('object');
         
         // Check all properties are updated 
         // with provided value.
         for (var property in MODEL_MOCK) {
-          if(property == "password"){
-            utils.bcryptCompare(MODEL_MOCK['password'], res.body.data['password'], function(error, match){
-              if (!match) done(err);        
-            });
-          } else {
-            res.body.data.should.have.property(property).eql(MODEL_MOCK[property]);
-          }
+          res.body.data.should.have.property(property).eql(MODEL_MOCK[property]);
         }
+        done();
       });
   });
 
   // Update
-  it('should update user', (done) => {
+  it('should update recurso', (done) => {
     chai.request(API_URL)
       .put('/' + MODEL_MOCK._id)
       .send(MODEL_MOCK_UPDATE)
@@ -107,13 +107,7 @@ describe("Users CRUD", function() {
         // Check all properties are updated 
         // with provided value.
         for (var property in MODEL_MOCK_UPDATE) {
-          if(property == "password"){
-            utils.bcryptCompare(MODEL_MOCK_UPDATE[property], res.body.data[property], function(error, match){
-              if (error) done(err);  
-            });
-          } else {
-            res.body.data.should.have.property(property).eql(MODEL_MOCK_UPDATE[property]);
-          }
+          res.body.data.should.have.property(property).eql(MODEL_MOCK_UPDATE[property]);
         }
 
         done();
@@ -121,14 +115,14 @@ describe("Users CRUD", function() {
   });
 
   // Delete
-  it('should delete user', (done) => {
+  it('should delete recurso', (done) => {
     chai.request(API_URL)
       .delete('/' + MODEL_MOCK._id)
       .send(MODEL_MOCK_UPDATE)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('object');
-        res.body.should.have.property('message').eql('User deleted!');
+        res.body.should.have.property('message').eql('Recurso deleted');
         done();
       });    
   });

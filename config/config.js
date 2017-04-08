@@ -29,8 +29,12 @@ module.exports = {
     secret: process.env.SECRET_KEY,
     // database url
     database: {
-      'test': process.env.MLAB_TEST_DB,
-      'production': process.env.CHOCOPOLEN_MLAB,
-      'development': process.env.CHOCOPOLEN_MLAB,
+      'test': 'mongodb://localhost:27017/recursos-jklpq-test',
+      'production': 'mongodb://localhost:27017/recursos-jklpq',
+      'development': 'mongodb://localhost:27017/recursos-jklpq-dev',
+      
+      // When authentication is ready ...
+      //'production': 'mongodb://pabagan:ak47t3m0m1@localhost:27017/recursos-jklpq',
+      //'development': 'mongodb://pabagan:ak47t3m0m1@localhost:27017/recursos-jklpq',
     }
 };
